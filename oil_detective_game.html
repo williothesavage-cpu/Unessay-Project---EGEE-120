@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>A Day With Will — The Oil Detective</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Nunito',sans-serif;
+  background:#1a1a2e;
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:1.5rem 1rem 3rem;
+}
+#G{
+  width:100%;
+  max-width:720px;
+  background:#f5f0e8;
+  border-radius:18px;
+  border:4px solid #1a1a2e;
+  padding:1.25rem;
+  box-shadow:8px 8px 0 rgba(0,0,0,0.4);
+}
+.scr{display:none;}.scr.on{display:block;}
+
+/* ── HUD ── */
+.hud{
+  display:flex;align-items:center;justify-content:space-between;
+  background:#1a1a2e;border-radius:10px;
+  padding:.5rem 1rem;margin-bottom:.75rem;
+}
+.hloc{font-family:'Bangers',cursive;font-size:1.1rem;letter-spacing:1px;color:#ffd166;}
+.hsco{font-family:'Bangers',cursive;font-size:1rem;color:#06d6a0;}
+.hliv{font-size:1.3rem;letter-spacing:2px;}
+
+/* ── TITLE ── */
+.title-card{
+  background:linear-gradient(135deg,#e85d04,#f48c06);
+  border:4px solid #1a1a2e;border-radius:14px;
+  padding:1.4rem 1rem;text-align:center;margin-bottom:.8rem;
+  position:relative;overflow:hidden;
+}
+.title-card::before{
+  content:'🛢️';position:absolute;right:-10px;bottom:-15px;
+  font-size:7rem;opacity:.1;
+}
+.game-title{
+  font-family:'Bangers',cursive;font-size:3.2rem;color:#fff;
+  letter-spacing:4px;text-shadow:4px 4px 0 #1a1a2e;line-height:1;
+}
+.game-sub{
+  font-family:'Bangers',cursive;font-size:1.1rem;
+  color:#fff3cd;letter-spacing:2px;margin-top:.25rem;
+}
+.day-steps{
+  display:flex;gap:.4rem;justify-content:center;
+  margin:.7rem 0;flex-wrap:wrap;
+}
+.day-pill{
+  background:#fff8e7;border:2px solid #1a1a2e;
+  border-radius:8px;padding:.4rem .75rem;
+  font-size:.78rem;font-weight:800;text-align:center;
+}
+.day-pill span{display:block;font-size:1.3rem;margin-bottom:2px;}
+
+/* ── SPEECH ROW ── */
+.srow{
+  display:flex;gap:.8rem;align-items:flex-start;
+  background:#fff8e7;border:3px solid #1a1a2e;
+  border-radius:12px;padding:.9rem;margin-bottom:.8rem;
+}
+.bub{
+  background:#fffde7;border:2.5px solid #1a1a2e;
+  border-radius:12px 12px 12px 4px;
+  padding:.7rem .95rem;font-size:.9rem;
+  line-height:1.65;color:#1a1a2e;flex:1;
+}
+.bub b{color:#e85d04;}
+
+/* ── BUTTONS ── */
+.btn-big{
+  background:#e85d04;color:#fff;
+  border:3px solid #1a1a2e;border-radius:10px;
+  padding:.7rem 2rem;font-family:'Bangers',cursive;
+  font-size:1.5rem;letter-spacing:2px;cursor:pointer;
+  box-shadow:4px 4px 0 #1a1a2e;display:block;margin:.5rem auto 0;
+  transition:transform .1s,box-shadow .1s;
+}
+.btn-big:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #1a1a2e;}
+.btn-big:active{transform:translate(1px,1px);box-shadow:2px 2px 0 #1a1a2e;}
+
+.btn-nxt{
+  background:#1d3557;color:#fff;
+  border:3px solid #1a1a2e;border-radius:8px;
+  padding:.5rem 1.5rem;font-family:'Bangers',cursive;
+  font-size:1.1rem;letter-spacing:2px;cursor:pointer;
+  box-shadow:3px 3px 0 #1a1a2e;margin-top:.6rem;
+  transition:transform .1s,box-shadow .1s;
+}
+.btn-nxt:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1a1a2e;}
+.btn-nxt:active{transform:translate(1px,1px);box-shadow:2px 2px 0 #1a1a2e;}
+
+/* ── SCENE ── */
+.scene-wrap{
+  border:3px solid #1a1a2e;border-radius:14px;
+  overflow:hidden;margin-bottom:.7rem;
+}
+#cvs{display:block;width:100%;height:auto;}
+
+/* ── NARR STRIP ── */
+.nstrip{
+  display:flex;gap:.7rem;align-items:flex-start;
+  background:#fff8e7;border:2.5px solid #1a1a2e;
+  border-radius:10px;padding:.7rem;margin-bottom:.6rem;
+}
+.ntag{
+  display:inline-block;background:#e85d04;color:#fff;
+  font-size:.7rem;font-weight:800;border-radius:5px;
+  padding:2px 8px;margin-bottom:4px;
+}
+.ntag.blue{background:#1d3557;}
+.ntag.green{background:#2d6a4f;}
+.ntag.purple{background:#6b35a8;}
+.ntext{font-size:.87rem;line-height:1.58;color:#1a1a2e;flex:1;}
+
+/* ── Q BAR ── */
+.qbar{
+  background:#1d3557;border:2.5px solid #1a1a2e;
+  border-radius:10px;padding:.6rem 1rem;
+  margin-bottom:.6rem;display:none;
+}
+.qbar.on{display:flex;align-items:center;gap:.5rem;}
+.qtxt{font-size:.9rem;font-weight:800;color:#fff;flex:1;}
+.qnum{font-family:'Bangers',cursive;font-size:1rem;color:#ffd166;white-space:nowrap;}
+
+/* ── ITEM CARDS ── */
+.items-grid{
+  display:none;
+  grid-template-columns:repeat(4,1fr);
+  gap:.6rem;margin-bottom:.6rem;
+}
+.items-grid.on{display:grid;}
+.icard{
+  background:#fff8e7;border:2.5px solid #1a1a2e;
+  border-radius:10px;padding:.6rem .3rem;
+  cursor:pointer;text-align:center;
+  transition:transform .12s,box-shadow .12s;
+  position:relative;
+}
+.icard:hover{transform:translateY(-4px);box-shadow:3px 4px 0 #1a1a2e;}
+.icard:active{transform:translateY(-1px);box-shadow:1px 2px 0 #1a1a2e;}
+.icard .ico{font-size:2.2rem;display:block;margin-bottom:4px;}
+.icard .nm{font-size:.72rem;font-weight:800;color:#1a1a2e;line-height:1.25;}
+.icard.cr{background:#d8f3dc;border-color:#2d6a4f;pointer-events:none;cursor:default;}
+.icard.wr{background:#ffe5e5;border-color:#9b2226;pointer-events:none;opacity:.72;cursor:default;}
+.icard.dis{pointer-events:none;cursor:default;}
+.rbadge{position:absolute;top:-9px;right:-9px;font-size:1.2rem;}
+
+/* ── FEEDBACK ── */
+.fb{
+  border:3px solid #1a1a2e;border-radius:12px;
+  padding:.9rem;margin-bottom:.6rem;display:none;
+}
+.fb.on{display:block;}
+.fb.c{background:#d8f3dc;}
+.fb.w{background:#ffe5e5;}
+.fbh{font-family:'Bangers',cursive;font-size:1.5rem;letter-spacing:1px;margin-bottom:.3rem;}
+.fb.c .fbh{color:#2d6a4f;}
+.fb.w .fbh{color:#9b2226;}
+.fbp{font-family:'Bangers',cursive;font-size:1rem;color:#e85d04;margin-bottom:.4rem;}
+.fbb{
+  font-size:.85rem;line-height:1.65;color:#1a1a2e;
+  background:#fff;border-radius:8px;padding:.65rem;
+}
+
+/* ── GAME OVER ── */
+.gocard{
+  background:#9b2226;border:4px solid #1a1a2e;
+  border-radius:14px;padding:1.3rem 1rem;
+  text-align:center;margin-bottom:.8rem;
+}
+.gotitle{
+  font-family:'Bangers',cursive;font-size:2.8rem;
+  color:#fff;text-shadow:3px 3px 0 #1a1a2e;
+}
+.gosub{color:#ffcdd2;font-size:.9rem;margin-top:.3rem;}
+.stat{
+  display:inline-block;background:#fff;
+  border:2px solid #1a1a2e;border-radius:10px;
+  padding:.55rem 1.3rem;margin:.45rem .25rem;
+}
+.statn{font-family:'Bangers',cursive;font-size:2rem;color:#e85d04;}
+.statl{font-size:.76rem;color:#555;}
+
+/* ── WIN ── */
+.wincard{
+  background:#2d6a4f;border:4px solid #1a1a2e;
+  border-radius:14px;padding:1.3rem 1rem;
+  text-align:center;margin-bottom:.8rem;
+}
+.wintitle{
+  font-family:'Bangers',cursive;font-size:2.6rem;
+  color:#fff;letter-spacing:2px;text-shadow:3px 3px 0 #1a1a2e;
+}
+.winsco{font-family:'Bangers',cursive;font-size:1.7rem;color:#ffd166;margin-top:.35rem;}
+.grade-ring{
+  display:inline-flex;flex-direction:column;align-items:center;
+  background:#fff;border:3px solid #1a1a2e;border-radius:50%;
+  width:88px;height:88px;justify-content:center;
+  margin:.8rem auto;
+}
+.gl{font-family:'Bangers',cursive;font-size:2.8rem;color:#e85d04;}
+.gll{font-size:.76rem;font-weight:800;color:#1a1a2e;margin-top:2px;}
+.sumbox{
+  background:#fff8e7;border:2.5px solid #1a1a2e;
+  border-radius:10px;padding:.8rem;
+  text-align:left;margin-bottom:.8rem;
+}
+.sumrow{font-size:.83rem;padding:4px 0;border-bottom:.5px solid #ddd;color:#1a1a2e;}
+.sumrow:last-child{border-bottom:none;}
+.tk{color:#2d6a4f;font-weight:800;}
+.cx{color:#9b2226;font-weight:800;}
+
+@media(max-width:520px){
+  .items-grid{grid-template-columns:repeat(2,1fr);}
+  .icard .ico{font-size:1.8rem;}
+  .game-title{font-size:2.4rem;}
+}
+</style>
+</head>
+<body>
+<div id="G">
+
+<!-- ════════════════════════════════════════════
+     TITLE SCREEN
+════════════════════════════════════════════ -->
+<div id="s-title" class="scr on">
+  <div class="title-card">
+    <div style="font-size:3.2rem;margin-bottom:.3rem;">🕵️🌅🛢️</div>
+    <div class="game-title">A DAY WITH WILL</div>
+    <div class="game-sub">The Oil Detective — Hidden Barrel Mystery</div>
+  </div>
+
+  <div class="day-steps">
+    <div class="day-pill"><span>🛏️</span>Wake Up</div>
+    <div class="day-pill" style="font-size:1.4rem;padding:.5rem .2rem;">→</div>
+    <div class="day-pill"><span>🛒</span>Grocery</div>
+    <div class="day-pill" style="font-size:1.4rem;padding:.5rem .2rem;">→</div>
+    <div class="day-pill"><span>📐</span>Class</div>
+    <div class="day-pill" style="font-size:1.4rem;padding:.5rem .2rem;">→</div>
+    <div class="day-pill"><span>🏋️</span>Gym</div>
+  </div>
+
+  <div class="srow">
+    <div id="will-title-wrap" style="width:74px;flex-shrink:0;"></div>
+    <div class="bub">
+      Hey detective! I'm <b>Will</b>. Follow me through my whole day — waking up, grocery shopping, heading to class, and finishing at the gym.<br><br>
+      At each stop, look at the full scene, then pick the item most connected to <b>crude oil</b>. Get 3 wrong and we restart from the beginning. Ready?
+    </div>
+  </div>
+  <button class="btn-big" onclick="startGame()">Start Will's Day →</button>
+</div>
+
+<!-- ════════════════════════════════════════════
+     GAME SCREEN
+════════════════════════════════════════════ -->
+<div id="s-game" class="scr">
+  <div class="hud">
+    <div class="hloc" id="h-loc">🛏️ Bedroom</div>
+    <div class="hsco" id="h-sco">Score: 0</div>
+    <div class="hliv" id="h-liv">❤️❤️❤️</div>
+  </div>
+
+  <div class="scene-wrap">
+    <svg id="cvs" viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <div class="nstrip">
+    <div style="font-size:2.2rem;flex-shrink:0;">🕵️</div>
+    <div class="ntext" id="ntext">Loading…</div>
+  </div>
+
+  <div class="qbar" id="qbar">
+    <span style="font-size:1.2rem;">❓</span>
+    <div class="qtxt" id="qtxt"></div>
+    <div class="qnum" id="qnum"></div>
+  </div>
+
+  <div class="items-grid" id="igrid"></div>
+
+  <div class="fb" id="fb">
+    <div class="fbh" id="fbh"></div>
+    <div class="fbp" id="fbp"></div>
+    <div class="fbb" id="fbb"></div>
+    <button class="btn-nxt" id="btnnxt">Next →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     GAME OVER SCREEN
+════════════════════════════════════════════ -->
+<div id="s-go" class="scr" style="text-align:center;padding:.5rem 0;">
+  <div class="gocard">
+    <div style="font-size:2.8rem;margin-bottom:.2rem;">💀🛢️</div>
+    <div class="gotitle">Case Cold!</div>
+    <div class="gosub">Three wrong answers — Will needs to start his day over.</div>
+  </div>
+  <div>
+    <div class="stat"><div class="statn" id="go-s">0</div><div class="statl">Points earned</div></div>
+    <div class="stat"><div class="statn" id="go-q">0</div><div class="statl">Questions answered</div></div>
+  </div>
+  <div class="srow" style="margin-top:.8rem;">
+    <div style="font-size:2.2rem;flex-shrink:0;">🕵️</div>
+    <div class="bub">Oil hides in plain sight — one of history's best-kept secrets. Study the scenes more carefully and try again!</div>
+  </div>
+  <button class="btn-big" onclick="startGame()">Try Again ↺</button>
+</div>
+
+<!-- ════════════════════════════════════════════
+     WIN SCREEN
+════════════════════════════════════════════ -->
+<div id="s-win" class="scr" style="padding:.5rem 0;">
+  <div class="wincard">
+    <div style="font-size:2.8rem;margin-bottom:.2rem;">🏆🕵️🛢️</div>
+    <div class="wintitle">Day Complete!</div>
+    <div class="winsco" id="win-s">Score: 0 / 80</div>
+  </div>
+  <div style="text-align:center;">
+    <div class="grade-ring"><div class="gl" id="grade-l">A</div></div>
+    <div class="gll" id="grade-ll">Master Detective</div>
+  </div>
+  <div class="srow" style="margin-top:.6rem;">
+    <div style="font-size:2.2rem;flex-shrink:0;">🕵️</div>
+    <div class="bub" id="win-msg">Excellent work!</div>
+  </div>
+  <div class="sumbox" id="sumbox"></div>
+  <div style="text-align:center;">
+    <button class="btn-big" onclick="startGame()">Play Again ↺</button>
+  </div>
+</div>
+
+</div><!-- end #G -->
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// WILL CHARACTER SVG BUILDER
+// ══════════════════════════════════════════════════════════════
+function will(cx, cy, sc) {
+  sc = sc || 1;
+  return `<g transform="translate(${cx},${cy}) scale(${sc})">
+    <ellipse cx="0" cy="62" rx="32" ry="8" fill="rgba(0,0,0,0.14)"/>
+    <rect x="-20" y="30" width="15" height="28" rx="6" fill="#3d2b1f"/>
+    <rect x="5" y="30" width="15" height="28" rx="6" fill="#3d2b1f"/>
+    <ellipse cx="-12" cy="60" rx="16" ry="7" fill="#1a1a1a"/>
+    <ellipse cx="12" cy="60" rx="16" ry="7" fill="#1a1a1a"/>
+    <path d="M-28,-24 Q-36,14 -30,34 L0,26 L30,34 Q36,14 28,-24 Q16,-15 0,-15 Q-16,-15 -28,-24Z" fill="#7a5510"/>
+    <path d="M0,-15 L-12,-4 L-5,12Z" fill="#5c3d08"/>
+    <path d="M0,-15 L12,-4 L5,12Z" fill="#5c3d08"/>
+    <polygon points="0,-15 -5,-5 0,10 5,-5" fill="#e85d04"/>
+    <circle cx="0" cy="14" r="2.5" fill="#5c3d08"/>
+    <circle cx="0" cy="22" r="2.5" fill="#5c3d08"/>
+    <path d="M-28,-20 Q-46,-6 -44,16" stroke="#7a5510" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <path d="M28,-20 Q46,-6 44,16" stroke="#7a5510" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <circle cx="-44" cy="18" r="9" fill="#f5c98a"/>
+    <circle cx="44" cy="18" r="9" fill="#f5c98a"/>
+    <circle cx="56" cy="6" r="13" fill="rgba(200,235,255,0.5)" stroke="#e85d04" stroke-width="3.5"/>
+    <circle cx="56" cy="6" r="6" fill="rgba(200,235,255,0.3)"/>
+    <line x1="65" y1="16" x2="76" y2="27" stroke="#8b5e14" stroke-width="4.5" stroke-linecap="round"/>
+    <rect x="-10" y="-46" width="20" height="18" rx="5" fill="#f0b87a"/>
+    <ellipse cx="0" cy="-66" rx="28" ry="30" fill="#f5c98a"/>
+    <ellipse cx="-27" cy="-66" rx="6" ry="9" fill="#f0b87a"/>
+    <ellipse cx="27" cy="-66" rx="6" ry="9" fill="#f0b87a"/>
+    <ellipse cx="-11" cy="-72" rx="7" ry="8" fill="#fff"/>
+    <ellipse cx="11" cy="-72" rx="7" ry="8" fill="#fff"/>
+    <circle cx="-11" cy="-71" r="4.5" fill="#2c1a0e"/>
+    <circle cx="11" cy="-71" r="4.5" fill="#2c1a0e"/>
+    <circle cx="-9" cy="-73" r="1.8" fill="#fff"/>
+    <circle cx="13" cy="-73" r="1.8" fill="#fff"/>
+    <path d="M-18,-82 Q-11,-87 -4,-82" stroke="#5c3a14" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M4,-82 Q11,-87 18,-82" stroke="#5c3a14" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="0" cy="-60" rx="4" ry="5.5" fill="#e8a870"/>
+    <circle cx="-3" cy="-57" r="2.2" fill="#d4905a"/>
+    <circle cx="3" cy="-57" r="2.2" fill="#d4905a"/>
+    <path d="M-11,-50 Q0,-43 11,-50" stroke="#c07b3e" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <rect x="-36" y="-102" width="72" height="9" rx="4" fill="#1a1a1a"/>
+    <rect x="-26" y="-138" width="52" height="38" rx="7" fill="#2c2c2c"/>
+    <rect x="-26" y="-104" width="52" height="8" rx="3" fill="#e85d04"/>
+  </g>`;
+}
+
+// speech bubble
+function bubble(x, y, w, h, lines, tailLeft) {
+  tailLeft = tailLeft !== false;
+  var s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="11" fill="#fffde7" stroke="#1a1a2e" stroke-width="2.5"/>`;
+  if (tailLeft) {
+    s += `<polygon points="${x},${y+h/2-10} ${x-20},${y+h/2+4} ${x},${y+h/2+14}" fill="#fffde7"/>`;
+    s += `<line x1="${x}" y1="${y+h/2-10}" x2="${x-20}" y2="${y+h/2+4}" stroke="#1a1a2e" stroke-width="2"/>`;
+    s += `<line x1="${x-20}" y1="${y+h/2+4}" x2="${x}" y2="${y+h/2+14}" stroke="#1a1a2e" stroke-width="2"/>`;
+  } else {
+    s += `<polygon points="${x+w},${y+h/2-10} ${x+w+20},${y+h/2+4} ${x+w},${y+h/2+14}" fill="#fffde7"/>`;
+    s += `<line x1="${x+w}" y1="${y+h/2-10}" x2="${x+w+20}" y2="${y+h/2+4}" stroke="#1a1a2e" stroke-width="2"/>`;
+    s += `<line x1="${x+w+20}" y1="${y+h/2+4}" x2="${x+w}" y2="${y+h/2+14}" stroke="#1a1a2e" stroke-width="2"/>`;
+  }
+  lines.forEach(function(ln, i) {
+    s += `<text x="${x+14}" y="${y+24+i*17}" font-size="11.5" font-family="Nunito,sans-serif" font-weight="700" fill="${i===lines.length-1?'#e85d04':'#1a1a2e'}">${ln}</text>`;
+  });
+  return s;
+}
+
+function sceneLabel(txt) {
+  var w = txt.length * 8 + 20;
+  return `<rect x="8" y="8" width="${w}" height="24" rx="7" fill="rgba(0,0,0,0.6)"/>
+  <text x="18" y="24" font-size="12" font-family="Bangers,cursive" letter-spacing="1.2" fill="#ffd166">${txt}</text>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// SCENE: BEDROOM
+// ══════════════════════════════════════════════════════════════
+function drawBedroom() {
+  var s = '';
+  s += `<rect width="720" height="330" fill="#b4cfe6"/>`;
+  for (var x = 0; x < 720; x += 46)
+    s += `<rect x="${x}" y="0" width="22" height="220" fill="rgba(255,255,255,0.07)"/>`;
+  s += `<rect x="0" y="220" width="720" height="110" fill="#c4a46a"/>`;
+  for (var x = 0; x < 720; x += 58)
+    s += `<rect x="${x}" y="220" width="56" height="110" fill="none" stroke="#b09050" stroke-width=".8"/>`;
+
+  // window
+  s += `<rect x="510" y="16" width="158" height="128" rx="9" fill="#87ceeb" stroke="#fff8dc" stroke-width="4"/>`;
+  s += `<line x1="589" y1="16" x2="589" y2="144" stroke="#d4a97a" stroke-width="3"/>`;
+  s += `<line x1="510" y1="80" x2="668" y2="80" stroke="#d4a97a" stroke-width="3"/>`;
+  s += `<circle cx="540" cy="56" r="28" fill="#ffd166" opacity=".65"/>`;
+  s += `<path d="M502,10 Q484,55 492,108 Q494,135 504,144 L504,10Z" fill="#e07070"/>`;
+  s += `<path d="M668,10 Q686,55 678,108 Q676,135 666,144 L666,10Z" fill="#e07070"/>`;
+
+  // bed
+  s += `<rect x="16" y="140" width="240" height="84" rx="11" fill="#6a4010"/>`;
+  s += `<rect x="16" y="134" width="240" height="24" rx="9" fill="#9b6520"/>`;
+  s += `<rect x="22" y="158" width="228" height="63" rx="7" fill="#ddc8ff"/>`;
+  s += `<rect x="22" y="158" width="228" height="20" rx="6" fill="#c8a8f8"/>`;
+  s += `<ellipse cx="95" cy="174" rx="52" ry="20" fill="#fff8f5" stroke="#ddd" stroke-width="1.2"/>`;
+  s += `<ellipse cx="178" cy="174" rx="42" ry="18" fill="#fff8f5" stroke="#ddd" stroke-width="1.2"/>`;
+
+  // nightstand
+  s += `<rect x="265" y="185" width="68" height="40" rx="7" fill="#c0904e" stroke="#8b6914" stroke-width="1.5"/>`;
+  s += `<circle cx="300" cy="178" r="15" fill="#e85d04" stroke="#1a1a2e" stroke-width="2"/>`;
+  s += `<circle cx="300" cy="178" r="10" fill="#fff"/>`;
+  s += `<line x1="300" y1="172" x2="300" y2="178" stroke="#333" stroke-width="1.8"/>`;
+  s += `<line x1="300" y1="178" x2="305" y2="181" stroke="#333" stroke-width="1.8"/>`;
+
+  // dresser
+  s += `<rect x="352" y="148" width="128" height="76" rx="7" fill="#c0904e" stroke="#8b6914" stroke-width="2"/>`;
+  s += `<rect x="357" y="153" width="118" height="30" rx="5" fill="#d4aa7a"/>`;
+  s += `<rect x="357" y="186" width="118" height="26" rx="5" fill="#d4aa7a"/>`;
+  s += `<circle cx="404" cy="168" r="5.5" fill="#8b6914"/>`;
+  s += `<circle cx="466" cy="168" r="5.5" fill="#8b6914"/>`;
+  s += `<circle cx="404" cy="199" r="5.5" fill="#8b6914"/>`;
+  s += `<circle cx="466" cy="199" r="5.5" fill="#8b6914"/>`;
+
+  // items on dresser
+  s += `<text x="356" y="147" font-size="28">🧴</text>`;
+  s += `<text x="394" y="147" font-size="28">💊</text>`;
+  s += `<text x="432" y="147" font-size="28">🪴</text>`;
+  s += `<text x="470" y="147" font-size="28">⏰</text>`;
+
+  // bookshelf
+  s += `<rect x="636" y="70" width="76" height="154" rx="6" fill="#c0904e" stroke="#8b6914" stroke-width="2"/>`;
+  for (var y = 92; y < 214; y += 30)
+    s += `<rect x="640" y="${y}" width="68" height="5" fill="#a07030"/>`;
+  var bkcols = ['#e85d04','#4a90d9','#2d6a4f','#ffd166','#9b2226','#6b35a8'];
+  bkcols.forEach(function(c,i) {
+    s += `<rect x="${642+i%3*22}" y="${97+Math.floor(i/3)*30}" width="16" height="24" rx="2" fill="${c}"/>`;
+  });
+
+  // rug
+  s += `<ellipse cx="210" cy="248" rx="165" ry="34" fill="#c084c0" stroke="#a060a0" stroke-width="2" opacity=".72"/>`;
+  s += `<ellipse cx="210" cy="248" rx="128" ry="26" fill="none" stroke="#a060a0" stroke-width="1.5" stroke-dasharray="10,5"/>`;
+
+  // floor lamp
+  s += `<rect x="490" y="100" width="5" height="124" rx="2" fill="#999"/>`;
+  s += `<ellipse cx="492" cy="100" rx="30" ry="14" fill="#ffd9a0" stroke="#999" stroke-width="2"/>`;
+  s += `<ellipse cx="492" cy="226" rx="22" ry="7" fill="#aaa"/>`;
+
+  // WILL sitting on bed
+  s += will(122, 242, 1.0);
+
+  // speech bubble
+  s += bubble(196, 104, 244, 68, ['Good morning! Oil is hiding', 'right here in my room...', 'Can you spot it?'], true);
+
+  s += sceneLabel('🛏️  WILL\'S BEDROOM');
+  return s;
+}
+
+// ══════════════════════════════════════════════════════════════
+// SCENE: GROCERY STORE
+// ══════════════════════════════════════════════════════════════
+function drawGrocery() {
+  var s = '';
+  s += `<rect width="720" height="330" fill="#e4f2f8"/>`;
+  s += `<rect x="0" y="258" width="720" height="72" fill="#d4bc86"/>`;
+  for (var x = 0; x < 720; x += 58)
+    s += `<rect x="${x}" y="258" width="56" height="72" fill="none" stroke="#c0a870" stroke-width=".8"/>`;
+
+  // ceiling lights
+  for (var x = 80; x < 720; x += 140) {
+    s += `<rect x="${x-42}" y="4" width="84" height="12" rx="4" fill="#fffbe6" stroke="#ddd" stroke-width=".5"/>`;
+    s += `<rect x="${x-2}" y="16" width="4" height="22" fill="#ccc"/>`;
+  }
+
+  // store sign
+  s += `<rect x="180" y="2" width="360" height="24" rx="5" fill="#e85d04"/>`;
+  s += `<text x="360" y="18" text-anchor="middle" font-size="13" font-family="Bangers,cursive" letter-spacing="2" fill="#fff">🛒  FRESH PICKS MARKET</text>`;
+
+  function shelf(x, y, w, h, col, icons) {
+    var o = `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${col}" stroke="#8b6914" stroke-width="1.5"/>`;
+    var gap = h / 4;
+    for (var i = 1; i <= 3; i++)
+      o += `<rect x="${x+5}" y="${y+gap*i-5}" width="${w-10}" height="8" rx="2" fill="rgba(0,0,0,0.12)"/>`;
+    icons.forEach(function(ic) { o += `<text x="${ic[0]}" y="${ic[1]}" font-size="23">${ic[2]}</text>`; });
+    return o;
+  }
+
+  // PRODUCE shelf
+  s += shelf(14, 36, 188, 204, '#aad080', [
+    [22,84,'🍎'],[60,84,'🍋'],[98,84,'🫐'],[136,84,'🥕'],
+    [22,142,'🌽'],[60,142,'🥦'],[98,142,'🌿'],[136,142,'🥑'],
+    [22,200,'🍇'],[60,200,'🥚'],[98,200,'🍊'],[136,200,'🌾']
+  ]);
+  s += `<text x="108" y="250" text-anchor="middle" font-size="9.5" font-family="Nunito,sans-serif" font-weight="800" fill="#444">PRODUCE</text>`;
+
+  // PACKAGED shelf
+  s += shelf(216, 36, 222, 204, '#94bcd8', [
+    [225,84,'🧃'],[265,84,'🫙'],[305,84,'🥫'],[345,84,'🍞'],
+    [225,142,'🧀'],[265,142,'🥤'],[305,142,'🍪'],[345,142,'🧈'],
+    [225,200,'🥣'],[265,200,'🧴'],[305,200,'🍫'],[345,200,'🧆']
+  ]);
+  s += `<text x="327" y="250" text-anchor="middle" font-size="9.5" font-family="Nunito,sans-serif" font-weight="800" fill="#444">PACKAGED GOODS</text>`;
+
+  // ORGANIC shelf
+  s += shelf(452, 36, 210, 204, '#c0aad8', [
+    [460,84,'🍯'],[498,84,'🌾'],[536,84,'🧄'],[574,84,'🫘'],
+    [460,142,'🥜'],[498,142,'🌻'],[536,142,'🫙'],[574,142,'🧂'],
+    [460,200,'🍵'],[498,200,'🫚'],[536,200,'🥓'],[574,200,'🌭']
+  ]);
+  s += `<text x="557" y="250" text-anchor="middle" font-size="9.5" font-family="Nunito,sans-serif" font-weight="800" fill="#444">ORGANIC & BULK</text>`;
+
+  // shopping cart
+  s += `<g transform="translate(378,256)">`;
+  s += `<path d="M0,0 L40,0 L34,32 L6,32Z" fill="none" stroke="#1d3557" stroke-width="2.5"/>`;
+  s += `<circle cx="10" cy="38" r="6" fill="#555"/>`;
+  s += `<circle cx="30" cy="38" r="6" fill="#555"/>`;
+  s += `<path d="M-14,-5 L0,0" stroke="#999" stroke-width="2.2"/>`;
+  s += `<text x="6" y="26" font-size="19">🧃</text>`;
+  s += `</g>`;
+
+  // WILL in aisle
+  s += will(322, 318, 1.0);
+
+  // speech bubble
+  s += bubble(390, 148, 244, 70, ['Oil hides in more products', 'than you think! Look at', 'every shelf carefully...'], true);
+
+  s += sceneLabel('🛒  FRESH PICKS MARKET');
+  return s;
+}
+
+// ══════════════════════════════════════════════════════════════
+// SCENE: CLASSROOM
+// ══════════════════════════════════════════════════════════════
+function drawClassroom() {
+  var s = '';
+  s += `<rect width="720" height="330" fill="#fff8bc"/>`;
+  for (var x = 0; x < 720; x += 58)
+    s += `<rect x="${x}" y="228" width="56" height="102" fill="none" stroke="#d4c0a0" stroke-width=".7"/>`;
+  s += `<rect x="0" y="228" width="720" height="102" fill="#e4cfa8"/>`;
+
+  // blackboard
+  s += `<rect x="100" y="16" width="520" height="114" rx="8" fill="#1a4a20" stroke="#8b6914" stroke-width="4"/>`;
+  s += `<rect x="107" y="22" width="506" height="102" rx="6" fill="#2d6a4f"/>`;
+  s += `<text x="360" y="72" text-anchor="middle" font-size="19" font-family="Bangers,cursive" letter-spacing="4" fill="rgba(255,255,255,0.84)">OIL IS EVERYWHERE!</text>`;
+  s += `<text x="360" y="96" text-anchor="middle" font-size="10" font-family="Nunito,sans-serif" fill="rgba(255,255,255,0.48)">— every civilization runs on petroleum</text>`;
+  s += `<rect x="100" y="128" width="520" height="12" rx="3" fill="#8b6914"/>`;
+  s += `<rect x="114" y="130" width="18" height="8" rx="2" fill="#fff"/>`;
+  s += `<rect x="136" y="130" width="18" height="8" rx="2" fill="#ffcccc"/>`;
+
+  // windows
+  s += `<rect x="10" y="14" width="84" height="108" rx="6" fill="#87ceeb" stroke="#fff" stroke-width="3"/>`;
+  s += `<line x1="52" y1="14" x2="52" y2="122" stroke="#d4a97a" stroke-width="2.5"/>`;
+  s += `<line x1="10" y1="68" x2="94" y2="68" stroke="#d4a97a" stroke-width="2.5"/>`;
+  s += `<rect x="626" y="14" width="84" height="108" rx="6" fill="#87ceeb" stroke="#fff" stroke-width="3"/>`;
+  s += `<line x1="668" y1="14" x2="668" y2="122" stroke="#d4a97a" stroke-width="2.5"/>`;
+  s += `<line x1="626" y1="68" x2="710" y2="68" stroke="#d4a97a" stroke-width="2.5"/>`;
+
+  // teacher desk
+  s += `<rect x="238" y="152" width="244" height="64" rx="7" fill="#c0904e" stroke="#8b6914" stroke-width="2"/>`;
+  s += `<rect x="243" y="157" width="234" height="25" rx="4" fill="#d4aa7a"/>`;
+  s += `<text x="248" y="182" font-size="28">📚</text>`;
+  s += `<text x="286" y="182" font-size="28">📏</text>`;
+  s += `<text x="324" y="182" font-size="28">🖍️</text>`;
+  s += `<text x="362" y="182" font-size="28">💻</text>`;
+  s += `<text x="400" y="182" font-size="28">✏️</text>`;
+  s += `<text x="438" y="182" font-size="28">📓</text>`;
+
+  // student desks
+  [[44,192],[152,192],[490,192],[598,192]].forEach(function(d) {
+    s += `<rect x="${d[0]}" y="${d[1]}" width="80" height="50" rx="6" fill="#d4aa7a" stroke="#b08050" stroke-width="1.5"/>`;
+  });
+  s += `<text x="54" y="225" font-size="20">📌</text>`;
+  s += `<text x="162" y="225" font-size="20">🎒</text>`;
+  s += `<text x="500" y="225" font-size="20">📐</text>`;
+  s += `<text x="608" y="225" font-size="20">🗂️</text>`;
+
+  // globe
+  s += `<circle cx="52" cy="160" r="26" fill="#4a90d9" stroke="#1a1a2e" stroke-width="2"/>`;
+  s += `<ellipse cx="52" cy="160" rx="9" ry="26" fill="none" stroke="#6ab0f5" stroke-width="1.5"/>`;
+  s += `<line x1="26" y1="160" x2="78" y2="160" stroke="#6ab0f5" stroke-width="1.5"/>`;
+
+  // oil facts poster
+  s += `<rect x="632" y="140" width="76" height="64" rx="6" fill="#ffd9d9" stroke="#e85d04" stroke-width="2"/>`;
+  s += `<text x="670" y="168" text-anchor="middle" font-size="12" font-family="Nunito,sans-serif" font-weight="800" fill="#9b2226">OIL</text>`;
+  s += `<text x="670" y="186" text-anchor="middle" font-size="12" font-family="Nunito,sans-serif" font-weight="800" fill="#9b2226">FACTS</text>`;
+
+  // WILL at front of class
+  s += will(188, 318, 1.0);
+
+  // speech bubble
+  s += bubble(258, 162, 226, 68, ['Class is in session!', 'Something on this desk', 'is secretly made of oil!'], true);
+
+  s += sceneLabel('📐  ROOM 101 — OIL STUDIES');
+  return s;
+}
+
+// ══════════════════════════════════════════════════════════════
+// SCENE: GYM
+// ══════════════════════════════════════════════════════════════
+function drawGym() {
+  var s = '';
+  s += `<rect width="720" height="330" fill="#fce4ec"/>`;
+  s += `<rect x="0" y="244" width="720" height="86" fill="#bcbcbc"/>`;
+  for (var x = 0; x < 720; x += 52)
+    s += `<rect x="${x}" y="244" width="50" height="86" fill="none" stroke="#aaa" stroke-width=".7"/>`;
+
+  // banner
+  s += `<rect x="130" y="4" width="460" height="26" rx="6" fill="#e85d04"/>`;
+  s += `<text x="360" y="21" text-anchor="middle" font-size="13" font-family="Bangers,cursive" letter-spacing="2" fill="#fff">💪  IRON WILL FITNESS CENTER  💪</text>`;
+
+  // window with view
+  s += `<rect x="458" y="34" width="244" height="136" rx="9" fill="#87ceeb" stroke="#fff" stroke-width="3"/>`;
+  s += `<line x1="580" y1="34" x2="580" y2="170" stroke="#d4a97a" stroke-width="2.5"/>`;
+  s += `<circle cx="510" cy="90" r="32" fill="#ffd166" opacity=".62"/>`;
+  s += `<rect x="458" y="118" width="244" height="52" fill="#7ab648" opacity=".45"/>`;
+  for (var x = 472; x < 695; x += 32)
+    s += `<rect x="${x}" y="118" width="20" height="52" rx="10" fill="#5a9a28" opacity=".38"/>`;
+
+  // treadmill
+  s += `<rect x="14" y="172" width="164" height="76" rx="8" fill="#555" stroke="#333" stroke-width="2"/>`;
+  s += `<rect x="22" y="180" width="148" height="46" rx="4" fill="#2a2a2a"/>`;
+  s += `<rect x="92" y="172" width="7" height="76" fill="#777"/>`;
+  s += `<rect x="78" y="168" width="34" height="8" rx="4" fill="#888"/>`;
+  s += `<rect x="26" y="220" width="140" height="9" rx="4" fill="#444"/>`;
+
+  // bench press
+  s += `<rect x="206" y="202" width="236" height="30" rx="7" fill="#8b6914" stroke="#6a4e10" stroke-width="2"/>`;
+  s += `<rect x="290" y="182" width="68" height="54" rx="6" fill="#a07830"/>`;
+  s += `<rect x="190" y="208" width="18" height="68" rx="5" fill="#888"/>`;
+  s += `<rect x="440" y="208" width="18" height="68" rx="5" fill="#888"/>`;
+  s += `<rect x="172" y="200" width="52" height="18" rx="7" fill="#444"/>`;
+  s += `<circle cx="178" cy="210" r="20" fill="#333" stroke="#222" stroke-width="2"/>`;
+  s += `<circle cx="178" cy="210" r="12" fill="#444"/>`;
+  s += `<circle cx="458" cy="210" r="20" fill="#333" stroke="#222" stroke-width="2"/>`;
+  s += `<circle cx="458" cy="210" r="12" fill="#444"/>`;
+
+  // gear shelf
+  s += `<rect x="14" y="152" width="164" height="20" rx="5" fill="#b08050" stroke="#8b6914" stroke-width="1.5"/>`;
+  s += `<text x="18" y="170" font-size="23">🩳</text>`;
+  s += `<text x="56" y="170" font-size="23">👟</text>`;
+  s += `<text x="94" y="170" font-size="23">🥤</text>`;
+  s += `<text x="132" y="170" font-size="23">🏊</text>`;
+
+  // weight rack
+  s += `<rect x="458" y="178" width="244" height="76" rx="6" fill="#888" stroke="#666" stroke-width="2"/>`;
+  for (var r = 0; r < 3; r++)
+    s += `<rect x="462" y="${181+r*22}" width="236" height="14" rx="3" fill="#999"/>`;
+  for (var x = 470; x < 694; x += 26) {
+    s += `<ellipse cx="${x}" cy="188" rx="9" ry="7" fill="#555" stroke="#333" stroke-width="1"/>`;
+    s += `<ellipse cx="${x}" cy="210" rx="8" ry="7" fill="#555" stroke="#333" stroke-width="1"/>`;
+    s += `<ellipse cx="${x}" cy="231" rx="7" ry="6" fill="#555" stroke="#333" stroke-width="1"/>`;
+  }
+
+  // yoga mat roll
+  s += `<ellipse cx="440" cy="164" rx="13" ry="32" fill="#4a90d9" stroke="#1d3557" stroke-width="2" transform="rotate(90,440,164)"/>`;
+
+  // WILL with dumbbell
+  s += will(358, 318, 1.0);
+  s += `<rect x="392" y="264" width="42" height="9" rx="4" fill="#555"/>`;
+  s += `<circle cx="392" cy="268" r="11" fill="#333" stroke="#222" stroke-width="1.5"/>`;
+  s += `<circle cx="434" cy="268" r="11" fill="#333" stroke="#222" stroke-width="1.5"/>`;
+
+  // speech bubble
+  s += bubble(412, 164, 244, 68, ['Even at the gym, oil is', 'all around us! Which item', 'gives it away?'], true);
+
+  s += sceneLabel('🏋️  IRON WILL FITNESS CENTER');
+  return s;
+}
+
+// ══════════════════════════════════════════════════════════════
+// GAME DATA
+// ══════════════════════════════════════════════════════════════
+var LEVELS = [
+  {
+    id: 'bedroom', name: "Will's Bedroom", tag: '🛏️', drawFn: drawBedroom,
+    ntag: 'orange', ntagLabel: 'MORNING — BEDROOM',
+    intro: "It's 7am and Will is just waking up. His room is full of everyday items — but oil is hiding right here before he even leaves the house. Take a good look at the dresser, nightstand, and shelves, then answer the question!",
+    questions: [
+      {
+        text: "Which item on Will's dresser is packed with petroleum-derived ingredients like mineral oil and propylene glycol?",
+        items: [
+          { id: 'lotion', ico: '🧴', nm: 'Lotion bottle' },
+          { id: 'pill',   ico: '💊', nm: 'Vitamin pill' },
+          { id: 'plant',  ico: '🪴', nm: 'Potted plant' },
+          { id: 'clock',  ico: '⏰', nm: 'Alarm clock' }
+        ],
+        correct: 'lotion',
+        exp: "Lotion bottles are loaded with petroleum-derived ingredients. Mineral oil is a direct byproduct of crude oil refining, and compounds like propylene glycol and synthetic fragrances all come from the same petrochemical process that produces gasoline. Oil provides the plastics and chemicals that are the \"bricks and mortar of contemporary civilization\" — and that includes your morning skincare routine."
+      },
+      {
+        text: "Will's cozy blanket looks natural, but it's made entirely from a fiber derived from crude oil. Which one is it?",
+        items: [
+          { id: 'wool',   ico: '🧶', nm: 'Wool blanket' },
+          { id: 'fleece', ico: '🛌', nm: 'Polyester fleece' },
+          { id: 'cotton', ico: '🪡', nm: 'Cotton sheets' },
+          { id: 'silk',   ico: '🎀', nm: 'Silk pillowcase' }
+        ],
+        correct: 'fleece',
+        exp: "Polyester fleece is made from PET — polyethylene terephthalate — a plastic derived directly from petroleum refining. After World War II, the triumphant spread of oil produced a \"dazzling array of plastics\" that conquered the textile industry. That blanket is, chemically speaking, crude oil that has been transformed into fiber."
+      }
+    ]
+  },
+  {
+    id: 'grocery', name: 'Fresh Picks Market', tag: '🛒', drawFn: drawGrocery,
+    ntag: 'blue', ntagLabel: 'MORNING ERRAND — GROCERY STORE',
+    intro: "Will heads out for groceries. Every product here arrived on diesel-fueled trucks — but that's just the beginning. Oil makes it possible to transport food to cities worldwide, and it's hiding inside the products and packaging themselves. Walk the aisles carefully!",
+    questions: [
+      {
+        text: "Which packaged item has its container built from layers of petroleum-derived plastic film, foil adhesive, and a polypropylene straw?",
+        items: [
+          { id: 'apple', ico: '🍎', nm: 'Loose apple' },
+          { id: 'juice', ico: '🧃', nm: 'Juice box' },
+          { id: 'bread', ico: '🍞', nm: 'Sourdough loaf' },
+          { id: 'honey', ico: '🍯', nm: 'Jar of honey' }
+        ],
+        correct: 'juice',
+        exp: "A juice box is petroleum engineering in disguise. The cardboard is laminated with polyethylene film from oil, the straw is polypropylene from oil, and the interior foil lining is bonded with petroleum-based adhesives. Oil provides the plastics and chemicals that form the foundation of contemporary civilization — and that includes the packaging around your morning drink."
+      },
+      {
+        text: "Which crop requires petroleum-based fertilizers, petrochemical pesticides, AND diesel-powered machinery at every stage of production?",
+        items: [
+          { id: 'herbs',  ico: '🌿', nm: 'Fresh herbs' },
+          { id: 'garlic', ico: '🧄', nm: 'Organic garlic' },
+          { id: 'corn',   ico: '🌽', nm: 'Conventional corn' },
+          { id: 'lemon',  ico: '🍋', nm: 'Bag of lemons' }
+        ],
+        correct: 'corn',
+        exp: "Conventional corn is one of the most oil-dependent crops on earth. Oil and natural gas are the essential components in the fertilizer on which world agriculture depends. On top of that, pesticides come from petrochemicals, and diesel powers every machine from the planter to the harvester to the truck that brought this corn to the store."
+      }
+    ]
+  },
+  {
+    id: 'classroom', name: 'Room 101 — Oil Studies', tag: '📐', drawFn: drawClassroom,
+    ntag: 'green', ntagLabel: 'AFTERNOON — CLASSROOM',
+    intro: "Will heads to class. Even in a school building, oil is everywhere — hiding in materials most people never think twice about. Look carefully at everything on the teacher's desk before answering. Some answers will surprise you!",
+    questions: [
+      {
+        text: "Which classroom item uses paraffin wax — a direct byproduct of petroleum distillation — as its main ingredient?",
+        items: [
+          { id: 'pencil',   ico: '✏️', nm: 'Wooden pencil' },
+          { id: 'ruler',    ico: '📏', nm: 'Plastic ruler' },
+          { id: 'crayon',   ico: '🖍️', nm: 'Wax crayons' },
+          { id: 'notebook', ico: '📓', nm: 'Notebook' }
+        ],
+        correct: 'crayon',
+        exp: "Crayons are made primarily from paraffin wax — a direct fraction of crude oil separated during petroleum distillation, the same process that produces gasoline and kerosene. These seemingly simple products were among the earliest mass-market petroleum derivatives, created from refinery fractions that were initially considered waste."
+      },
+      {
+        text: "Which item on the desk is constructed almost entirely from petroleum-based plastics — casing, screen, keyboard, and internal components?",
+        items: [
+          { id: 'books',   ico: '📚', nm: 'Textbooks' },
+          { id: 'globe',   ico: '🌍', nm: 'Classroom globe' },
+          { id: 'laptop',  ico: '💻', nm: 'Laptop computer' },
+          { id: 'compass', ico: '📐', nm: 'Geometry set' }
+        ],
+        correct: 'laptop',
+        exp: "A laptop is extraordinarily oil-intensive. The ABS plastic casing, polycarbonate screen, polyurethane keyboard, and liquid crystal display are all petroleum derivatives. Oil's reign as the undisputed King of energy produced a proliferation of products garbed in plastics — and modern electronics are among the most complete examples of how oil transformed the materials of everyday life."
+      }
+    ]
+  },
+  {
+    id: 'gym', name: 'Iron Will Fitness Center', tag: '🏋️', drawFn: drawGym,
+    ntag: 'purple', ntagLabel: 'EVENING — GYM',
+    intro: "Will's last stop of the day — the gym! Even here, chasing health, we're surrounded by Hydrocarbon Man's products. Look at the gear shelf, the equipment, and the items around the room. Oil has transformed even how we work out.",
+    questions: [
+      {
+        text: "Which piece of athletic gear is made from a synthetic polyurethane fiber that exists solely because of petroleum chemistry?",
+        items: [
+          { id: 'dumbbells', ico: '🏋️', nm: 'Iron dumbbells' },
+          { id: 'towel',     ico: '🏊', nm: 'Cotton towel' },
+          { id: 'spandex',   ico: '🩳', nm: 'Spandex shorts' },
+          { id: 'mat',       ico: '🧘', nm: 'Rubber mat' }
+        ],
+        correct: 'spandex',
+        exp: "Spandex — also called Lycra or elastane — is a synthetic polyurethane fiber made entirely from petroleum-derived chemicals. It has no natural equivalent whatsoever. The post-WWII petrochemical boom produced entirely new categories of synthetic textiles, and elastic stretch fabrics were among the most dramatic — completely transforming athleticwear and sportswear."
+      },
+      {
+        text: "Which item at the gym is built from EVA foam, polyurethane outsole, nylon mesh upper, and synthetic rubber — all crude oil derivatives?",
+        items: [
+          { id: 'water',   ico: '🥤', nm: 'Shaker bottle' },
+          { id: 'sneaker', ico: '👟', nm: 'Running sneakers' },
+          { id: 'bench',   ico: '🏋️', nm: 'Iron barbell' },
+          { id: 'tmill',   ico: '🚶', nm: 'Treadmill belt' }
+        ],
+        correct: 'sneaker',
+        exp: "Modern running shoes are built almost entirely from petroleum products. The EVA foam midsole, polyurethane outsole, nylon mesh upper, synthetic rubber heel, and polyester laces all trace back to crude oil refining. The synthetic rubber industry — which expanded dramatically after natural rubber supplies were cut off during WWII — became one of the most important petroleum-derived material sectors in the world."
+      }
+    ]
+  }
+];
+
+// ══════════════════════════════════════════════════════════════
+// ENGINE
+// ══════════════════════════════════════════════════════════════
+var score = 0, lives = 3, lvIdx = 0, qIdx = 0, answered = false, results = [];
+
+function show(id) {
+  document.querySelectorAll('.scr').forEach(function(s) { s.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+}
+
+function updHUD() {
+  var lv = LEVELS[lvIdx] || LEVELS[LEVELS.length - 1];
+  document.getElementById('h-loc').textContent = lv.tag + ' ' + lv.name;
+  document.getElementById('h-sco').textContent = 'Score: ' + score;
+  document.getElementById('h-liv').textContent =
+    '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives));
+}
+
+function startGame() {
+  score = 0; lives = 3; lvIdx = 0; qIdx = 0; results = []; answered = false;
+  show('s-game');
+  loadLevel();
+}
+
+function loadLevel() {
+  if (lvIdx >= LEVELS.length) { showWin(); return; }
+  qIdx = 0;
+  var lv = LEVELS[lvIdx];
+  document.getElementById('cvs').innerHTML = lv.drawFn();
+  updHUD();
+  setNarr('<span class="ntag ' + lv.ntag + '">' + lv.ntagLabel + '</span><br>' + lv.intro, true);
+  document.getElementById('qbar').className = 'qbar';
+  document.getElementById('igrid').className = 'items-grid';
+  document.getElementById('fb').className = 'fb';
+}
+
+function setNarr(html, showBtn) {
+  var nt = document.getElementById('ntext');
+  nt.innerHTML = html;
+  if (showBtn) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-nxt';
+    btn.style.marginTop = '.6rem';
+    btn.textContent = 'Look Around →';
+    btn.onclick = loadQuestion;
+    nt.appendChild(btn);
+  }
+}
+
+function loadQuestion() {
+  var lv = LEVELS[lvIdx];
+  if (qIdx >= lv.questions.length) { lvIdx++; loadLevel(); return; }
+  answered = false;
+  var q = lv.questions[qIdx];
+
+  var qbar = document.getElementById('qbar');
+  qbar.className = 'qbar on';
+  document.getElementById('qtxt').textContent = q.text;
+  document.getElementById('qnum').textContent =
+    'Q' + (lvIdx * 2 + qIdx + 1) + ' / ' + (LEVELS.length * 2);
+
+  var ig = document.getElementById('igrid');
+  ig.className = 'items-grid on';
+  ig.innerHTML = '';
+  q.items.forEach(function(it) {
+    var d = document.createElement('div');
+    d.className = 'icard';
+    d.id = 'ic-' + it.id;
+    d.innerHTML = '<span class="ico">' + it.ico + '</span><div class="nm">' + it.nm + '</div>';
+    d.onclick = function() { pick(it.id); };
+    ig.appendChild(d);
+  });
+
+  document.getElementById('fb').className = 'fb';
+  document.getElementById('ntext').innerHTML =
+    '<span class="ntag ' + lv.ntag + '">' + lv.ntagLabel + '</span><br>' +
+    'Study the full scene carefully, then tap the item that best answers Will\'s question!';
+  updHUD();
+}
+
+function pick(id) {
+  if (answered) return;
+  answered = true;
+  var lv = LEVELS[lvIdx];
+  var q = lv.questions[qIdx];
+  var correct = (id === q.correct);
+  if (correct) score += 10; else lives--;
+  results.push({ lvName: lv.name, q: q, chosen: id, correct: correct });
+
+  q.items.forEach(function(it) {
+    var c = document.getElementById('ic-' + it.id);
+    if (!c) return;
+    c.classList.add('dis');
+    if (it.id === q.correct) {
+      c.classList.add('cr');
+      c.innerHTML += '<span class="rbadge">✅</span>';
+    } else if (it.id === id && !correct) {
+      c.classList.add('wr');
+      c.innerHTML += '<span class="rbadge">❌</span>';
+    }
+  });
+
+  var fb = document.getElementById('fb');
+  fb.className = 'fb on ' + (correct ? 'c' : 'w');
+  document.getElementById('fbh').textContent = correct ? '🔍 Nice detective work!' : '🚫 Not quite...';
+  document.getElementById('fbp').textContent = correct ? '+10 points — great eye!' : 'No points this round.';
+
+  var co = q.items.find(function(i) { return i.id === q.correct; });
+  var ch = q.items.find(function(i) { return i.id === id; });
+  document.getElementById('fbb').innerHTML =
+    (correct
+      ? '<strong>✅ ' + co.ico + ' ' + co.nm + '</strong> — correct!<br><br>'
+      : 'You chose: <strong>' + ch.ico + ' ' + ch.nm + '</strong>. The answer was: <strong>' + co.ico + ' ' + co.nm + '</strong>.<br><br>')
+    + q.exp;
+
+  updHUD();
+
+  var btn = document.getElementById('btnnxt');
+  if (lives <= 0) {
+    btn.textContent = 'See Results →';
+    btn.onclick = showGameOver;
+  } else {
+    var isLastQ = (qIdx + 1 >= lv.questions.length);
+    var isLastLv = (lvIdx + 1 >= LEVELS.length);
+    if (isLastQ && isLastLv) {
+      btn.textContent = "Finish Will's Day →";
+      btn.onclick = showWin;
+    } else if (isLastQ) {
+      btn.textContent = 'Next Location →';
+      btn.onclick = function() { qIdx++; loadQuestion(); };
+    } else {
+      btn.textContent = 'Next Clue →';
+      btn.onclick = function() { qIdx++; loadQuestion(); };
+    }
+  }
+}
+
+function showGameOver() {
+  document.getElementById('go-s').textContent = score;
+  document.getElementById('go-q').textContent = results.length;
+  show('s-go');
+}
+
+function showWin() {
+  var total = LEVELS.reduce(function(a, lv) { return a + lv.questions.length; }, 0) * 10;
+  document.getElementById('win-s').textContent = 'Score: ' + score + ' / ' + total;
+  var pct = score / total;
+  var g, l, m;
+  if (pct >= .9)      { g = 'A+'; l = 'Master Detective'; m = "Outstanding! You've spotted what Hydrocarbon Man barely notices — oil is so pervasive in modern life that we can hardly stop to comprehend its significance. Will is impressed!"; }
+  else if (pct >= .75){ g = 'A';  l = 'Senior Detective'; m = "Excellent! You understand that oil powers our world not just as fuel, but as the plastics and chemicals that are the bricks and mortar of contemporary civilization."; }
+  else if (pct >= .6) { g = 'B';  l = 'Junior Detective'; m = "Good work! Oil makes possible where we live, how we live, how we commute — even the clothes we wear. Keep digging and you'll see it everywhere."; }
+  else if (pct >= .4) { g = 'C';  l = 'Rookie Detective'; m = "You're learning the ropes! Oil's most important role isn't just in gas tanks — it's in the synthetic materials and petrochemicals that quietly reshaped modern life."; }
+  else                { g = 'D';  l = 'Cadet';            m = "Don't give up! Hydrocarbon Man shows little inclination to recognize his dependence — but you can. Study the scenes again and look for the hidden oil."; }
+
+  document.getElementById('grade-l').textContent = g;
+  document.getElementById('grade-ll').textContent = l;
+  document.getElementById('win-msg').textContent = m;
+
+  var sb = document.getElementById('sumbox');
+  sb.innerHTML = '<div style="font-weight:800;margin-bottom:.5rem;">📋 Will\'s Day — Case Log:</div>';
+  results.forEach(function(r, i) {
+    var co = r.q.items.find(function(x) { return x.id === r.q.correct; });
+    var d = document.createElement('div');
+    d.className = 'sumrow';
+    d.innerHTML = '<span class="' + (r.correct ? 'tk' : 'cx') + '">' + (r.correct ? '✔' : '✗') + '</span> ' +
+      'Q' + (i + 1) + ' — ' + r.lvName + ': ' + co.ico + ' ' + co.nm + ' ' + (r.correct ? '(+10)' : '(+0)');
+    sb.appendChild(d);
+  });
+  show('s-win');
+}
+
+// Build Will on title screen
+document.getElementById('will-title-wrap').innerHTML =
+  '<svg width="74" height="102" viewBox="-44 -148 88 210" xmlns="http://www.w3.org/2000/svg">' +
+  will(0, 0, 1) + '</svg>';
+</script>
+</body>
+</html>
